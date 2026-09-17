@@ -7,16 +7,6 @@ metadata:
   name: travelgo
 ---
 apiVersion: v1
-kind: Secret
-metadata:
-  name: travelgo-secrets
-  namespace: travelgo
-type: Opaque
-stringData:
-  mysql-root-password: CHANGE_ME
-  jwt-secret: CHANGE_ME
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: travelgo-config
