@@ -1,0 +1,3 @@
+package com.travelgo.service;
+import com.travelgo.repository.DestinationRepository; import org.junit.jupiter.api.Test; import org.junit.jupiter.api.extension.ExtendWith; import org.mockito.InjectMocks; import org.mockito.Mock; import org.mockito.junit.jupiter.MockitoExtension; import static org.junit.jupiter.api.Assertions.*; import static org.mockito.Mockito.*;
+@ExtendWith(MockitoExtension.class) class DestinationServiceTest { @Mock DestinationRepository repo; @InjectMocks DestinationService service; @Test void missingDestinationFails(){when(repo.findById(99L)).thenReturn(java.util.Optional.empty());assertThrows(com.travelgo.exception.ResourceNotFoundException.class,()->service.one(99L));} }

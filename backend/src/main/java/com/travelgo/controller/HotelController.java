@@ -1,0 +1,5 @@
+package com.travelgo.controller;
+import com.travelgo.dto.HotelRequest; import com.travelgo.entity.Hotel; import com.travelgo.service.HotelService; import jakarta.validation.Valid; import lombok.RequiredArgsConstructor; import org.springframework.security.access.prepost.PreAuthorize; import org.springframework.web.bind.annotation.*; import java.util.List;
+@RestController @RequestMapping("/api/hotels") @RequiredArgsConstructor public class HotelController { private final HotelService service;
+ @GetMapping public List<Hotel> all(){return service.all();} @GetMapping("/{id}") public Hotel one(@PathVariable Long id){return service.one(id);} @PostMapping @PreAuthorize("hasRole('ADMIN')") public Hotel create(@Valid @RequestBody HotelRequest r){return service.save(r);} @PutMapping("/{id}") @PreAuthorize("hasRole('ADMIN')") public Hotel update(@PathVariable Long id,@Valid @RequestBody HotelRequest r){return service.update(id,r);} @DeleteMapping("/{id}") @PreAuthorize("hasRole('ADMIN')") public void delete(@PathVariable Long id){service.delete(id);}
+}

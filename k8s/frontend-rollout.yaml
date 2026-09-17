@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: travelgo-frontend
+  namespace: travelgo
+spec:
+  replicas: 4
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels: {app: travelgo-frontend}
+  template:
+    metadata:
+      labels: {app: travelgo-frontend}
+    spec:
+      containers:
+      - name: frontend
+        image: YOUR_DOCKERHUB_USER/travelgo-frontend:IMAGE_TAG
+        ports: [{containerPort: 80}]
+        readinessProbe: {httpGet: {path: /, port: 80}, initialDelaySeconds: 5, periodSeconds: 10}
+  strategy:
+    canary:
+      steps:
+      - setWeight: 10
+      - pause: {duration: 60}
+      - setWeight: 25
+      - pause: {duration: 60}
+      - setWeight: 50
+      - pause: {duration: 60}
+      - setWeight: 100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: travelgo-frontend
+  namespace: travelgo
+spec:
+  selector: {app: travelgo-frontend}
+  ports: [{port: 80, targetPort: 80}]

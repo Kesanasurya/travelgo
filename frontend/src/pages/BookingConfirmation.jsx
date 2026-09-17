@@ -1,0 +1,2 @@
+import { Link } from "react-router-dom";
+export default function BookingConfirmation() { const booking = JSON.parse(sessionStorage.getItem("travelgo_booking") || "null"); return <section className="page-section"><div className="container narrow success"><h1>Booking Confirmed</h1><p>{booking ? `Booking ID: TG-${booking.id}` : "Your booking details are ready in My Bookings."}</p><Link className="btn" to="/my-bookings">View My Bookings</Link></div></section>; }

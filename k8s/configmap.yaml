@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: travelgo-config
+  namespace: travelgo
+data:
+  cors-origins: https://travelgo.example.com

@@ -1,0 +1,5 @@
+package com.travelgo.controller;
+import com.travelgo.dto.BookingRequest; import com.travelgo.entity.Booking; import com.travelgo.service.BookingService; import jakarta.validation.Valid; import lombok.RequiredArgsConstructor; import org.springframework.security.access.prepost.PreAuthorize; import org.springframework.security.core.Authentication; import org.springframework.web.bind.annotation.*; import java.util.List;
+@RestController @RequestMapping("/api/bookings") @RequiredArgsConstructor public class BookingController { private final BookingService service;
+ @PostMapping public Booking create(Authentication a,@Valid @RequestBody BookingRequest r){return service.create(a.getName(),r);} @GetMapping("/my") public List<Booking> mine(Authentication a){return service.mine(a.getName());} @GetMapping("/{id}") public Booking one(Authentication a,@PathVariable Long id){return service.oneForUser(id,a.getName());} @PutMapping("/{id}/cancel") public Booking cancel(Authentication a,@PathVariable Long id){return service.cancel(id,a.getName());} @GetMapping("/admin") @PreAuthorize("hasRole('ADMIN')") public List<Booking> all(){return service.all();}
+}

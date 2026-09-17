@@ -1,0 +1,5 @@
+com\travelgo\service\AuthServiceTest.class
+com\travelgo\service\HotelServiceTest.class
+com\travelgo\service\BookingServiceTest.class
+com\travelgo\service\DestinationServiceTest.class
+com\travelgo\service\PackageServiceTest.class

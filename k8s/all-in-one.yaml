@@ -1,0 +1,187 @@
+# TravelGo Kubernetes bundle.
+# Replace image names, repository values, and secret placeholders before deployment.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: travelgo
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: travelgo-secrets
+  namespace: travelgo
+type: Opaque
+stringData:
+  mysql-root-password: CHANGE_ME
+  jwt-secret: CHANGE_ME
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: travelgo-config
+  namespace: travelgo
+data:
+  cors-origins: https://travelgo.example.com
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: travelgo
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+    scrape_configs:
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: travelgo
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: travelgo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: mysql}
+  template:
+    metadata:
+      labels: {app: mysql}
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.4
+        ports: [{containerPort: 3306}]
+        env:
+        - {name: MYSQL_DATABASE, value: travelgo}
+        - {name: MYSQL_ROOT_PASSWORD, valueFrom: {secretKeyRef: {name: travelgo-secrets, key: mysql-root-password}}}
+        volumeMounts: [{name: data, mountPath: /var/lib/mysql}]
+        readinessProbe:
+          exec: {command: ["sh", "-c", "mysqladmin ping -h 127.0.0.1 -uroot -p$MYSQL_ROOT_PASSWORD"]}
+          initialDelaySeconds: 20
+          periodSeconds: 10
+      volumes:
+      - name: data
+        persistentVolumeClaim: {claimName: mysql-pvc}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: travelgo
+spec:
+  selector: {app: mysql}
+  ports: [{port: 3306, targetPort: 3306}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: travelgo-backend
+  namespace: travelgo
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: travelgo-backend}
+  template:
+    metadata:
+      labels: {app: travelgo-backend}
+    spec:
+      containers:
+      - name: backend
+        image: YOUR_DOCKERHUB_USER/travelgo-backend:IMAGE_TAG
+        ports: [{containerPort: 5000}]
+        env:
+        - {name: PORT, value: "5000"}
+        - {name: DB_URL, value: "jdbc:mysql://mysql:3306/travelgo?createDatabaseIfNotExist=true&serverTimezone=UTC"}
+        - {name: DB_USERNAME, value: root}
+        - {name: DB_PASSWORD, valueFrom: {secretKeyRef: {name: travelgo-secrets, key: mysql-root-password}}}
+        - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: travelgo-secrets, key: jwt-secret}}}
+        - {name: CORS_ALLOWED_ORIGINS, valueFrom: {configMapKeyRef: {name: travelgo-config, key: cors-origins}}}
+        readinessProbe: {httpGet: {path: /actuator/health, port: 5000}, initialDelaySeconds: 25, periodSeconds: 10}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: travelgo-backend
+  namespace: travelgo
+spec:
+  selector: {app: travelgo-backend}
+  ports: [{port: 5000, targetPort: 5000}]
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: travelgo-frontend
+  namespace: travelgo
+spec:
+  replicas: 4
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels: {app: travelgo-frontend}
+  template:
+    metadata:
+      labels: {app: travelgo-frontend}
+    spec:
+      containers:
+      - name: frontend
+        image: YOUR_DOCKERHUB_USER/travelgo-frontend:IMAGE_TAG
+        ports: [{containerPort: 80}]
+        readinessProbe: {httpGet: {path: /, port: 80}, initialDelaySeconds: 5, periodSeconds: 10}
+  strategy:
+    canary:
+      steps:
+      - setWeight: 10
+      - pause: {duration: 60}
+      - setWeight: 25
+      - pause: {duration: 60}
+      - setWeight: 50
+      - pause: {duration: 60}
+      - setWeight: 100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: travelgo-frontend
+  namespace: travelgo
+spec:
+  selector: {app: travelgo-frontend}
+  ports: [{port: 80, targetPort: 80}]
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: travelgo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YOUR_GITHUB_USER/travelgo.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: travelgo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

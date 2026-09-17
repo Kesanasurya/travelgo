@@ -1,0 +1,5 @@
+package com.travelgo.controller;
+import com.travelgo.dto.PackageRequest; import com.travelgo.entity.TravelPackage; import com.travelgo.service.PackageService; import jakarta.validation.Valid; import lombok.RequiredArgsConstructor; import org.springframework.security.access.prepost.PreAuthorize; import org.springframework.web.bind.annotation.*; import java.util.List;
+@RestController @RequestMapping("/api/packages") @RequiredArgsConstructor public class PackageController { private final PackageService service;
+ @GetMapping public List<TravelPackage> all(){return service.all();} @GetMapping("/{id}") public TravelPackage one(@PathVariable Long id){return service.one(id);} @PostMapping @PreAuthorize("hasRole('ADMIN')") public TravelPackage create(@Valid @RequestBody PackageRequest r){return service.save(r);} @PutMapping("/{id}") @PreAuthorize("hasRole('ADMIN')") public TravelPackage update(@PathVariable Long id,@Valid @RequestBody PackageRequest r){return service.update(id,r);} @DeleteMapping("/{id}") @PreAuthorize("hasRole('ADMIN')") public void delete(@PathVariable Long id){service.delete(id);}
+}

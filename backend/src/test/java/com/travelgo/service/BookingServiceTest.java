@@ -1,0 +1,3 @@
+package com.travelgo.service;
+import com.travelgo.repository.*; import org.junit.jupiter.api.Test; import org.junit.jupiter.api.extension.ExtendWith; import org.mockito.InjectMocks; import org.mockito.Mock; import org.mockito.junit.jupiter.MockitoExtension; import static org.junit.jupiter.api.Assertions.*; import static org.mockito.Mockito.*;
+@ExtendWith(MockitoExtension.class) class BookingServiceTest { @Mock BookingRepository bookings; @Mock UserRepository users; @Mock TravelPackageRepository packages; @InjectMocks BookingService service; @Test void missingBookingFails(){when(bookings.findById(9L)).thenReturn(java.util.Optional.empty());assertThrows(com.travelgo.exception.ResourceNotFoundException.class,()->service.oneForUser(9L,"a@b.com"));} }
