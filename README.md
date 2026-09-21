@@ -73,4 +73,4 @@ Argo CD watches the repository and Argo Rollouts releases frontend images throug
 
 Register a user, sign in, browse destinations and packages, book a future trip, inspect My Bookings, cancel it, then sign in as the seeded admin and demonstrate the protected admin surface. For the project presentation, show the REST API, MySQL relationships, Docker Compose health ordering, CI run, Argo CD sync, and canary rollout progression.
 
-# travel
+# travelgo
