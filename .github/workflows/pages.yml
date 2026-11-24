@@ -1,8 +1,7 @@
 name: Deploy frontend to GitHub Pages
 
+# Netlify is the main frontend host; run this manually if a GitHub Pages copy is needed.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

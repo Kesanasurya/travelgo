@@ -1,0 +1,45 @@
+.payment-page{background:#f5f9fb}
+.payment-container{max-width:980px}
+.payment-heading h1{font:700 48px "Playfair Display",serif;margin:8px 0}
+.payment-heading .lead{margin-bottom:20px}
+.demo-payment-banner{display:grid;gap:5px;margin:0 0 24px;padding:16px 19px;border:1px solid #f1d89b;border-radius:14px;background:#fff9e9;color:#654d18;font-size:13px;line-height:1.55}
+.demo-payment-banner strong{font-size:14px}
+.payment-layout{display:grid;grid-template-columns:1.25fr .75fr;align-items:start;gap:22px}
+.payment-methods h2,.payment-summary h2{margin:0 0 8px;font-size:20px}
+.payment-method-list{display:grid;gap:11px}
+.payment-method{display:flex;align-items:center;gap:13px;padding:14px;border:1px solid var(--line);border-radius:13px;background:#fff;cursor:pointer}
+.payment-method.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(8,168,138,.12)}
+.payment-method input{width:17px;height:17px;margin:0;accent-color:var(--accent2)}
+.payment-method>svg{flex:0 0 auto;color:var(--accent2)}
+.payment-method>span{display:grid;gap:4px}
+.payment-method strong{font-size:14px}
+.payment-method small{font-size:12px;color:var(--muted)}
+.payment-methods>.btn{margin-top:5px}
+.payment-back-link{justify-self:center;color:var(--accent2);font-size:13px;font-weight:700}
+.payment-summary{padding:24px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 5px 20px rgba(16,42,67,.04)}
+.payment-summary h2{margin:10px 0 5px}
+.payment-summary>p{margin:0 0 20px;color:var(--muted);font-size:13px}
+.payment-summary-row,.payment-summary-total{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-top:1px solid #edf2f7;font-size:13px}
+.payment-summary-row span,.payment-summary-note{color:var(--muted)}
+.payment-summary-total{margin-top:5px;padding-top:17px;font-size:15px}
+.payment-summary-total strong{font-size:19px}
+.payment-summary .payment-summary-note{margin:14px 0 0;font-size:11px;line-height:1.6}
+.booking-estimate{display:grid;gap:4px;padding:15px;border:1px solid var(--line);border-radius:12px;background:#f8fbfc}
+.booking-estimate>span,.booking-estimate>small{font-size:12px;color:var(--muted)}
+.booking-estimate>strong{font-size:20px;color:var(--ink)}
+.demo-payment-note{padding:12px 14px;border-radius:10px;background:#fff9e9;color:#654d18;font-size:13px;line-height:1.55}
+.payment-confirmation{padding:45px}
+.payment-success-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 20px;border-radius:50%;background:#e4faf5;color:var(--accent2)}
+.payment-confirmation .eyebrow{display:block}
+.payment-confirmation h1{font:700 clamp(32px,5vw,46px)/1.12 "Playfair Display",serif;margin:12px 0}
+.payment-confirmation>p{color:var(--muted);line-height:1.65}
+.payment-receipt{display:grid;gap:0;margin:27px 0;text-align:left;border-top:1px solid var(--line)}
+.payment-receipt>div{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}
+.payment-receipt>div span{color:var(--muted)}
+.payment-receipt>div strong{text-align:right;overflow-wrap:anywhere}
+.payment-confirmation-actions{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:20px}
+.nav-links .nav-login{border:0;background:transparent;padding:0;font:inherit;cursor:pointer}
+.admin-shortcuts{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 28px}
+.hotel-detail-image{display:block;width:100%;max-height:400px;margin:22px 0;object-fit:cover;border-radius:18px}
+@media(max-width:760px){.payment-layout{grid-template-columns:1fr}.payment-heading h1{font-size:40px}.payment-confirmation{padding:28px 20px}}
+@media(prefers-reduced-motion:reduce){.payment-method{transition:none}}

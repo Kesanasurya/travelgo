@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`. The API runs at `http://localhost:5000`.
+Open `http://localhost:5173`. The API defaults to `http://localhost:5000`, but you can override the backend port with the `PORT` environment variable if `5000` is already in use.
 
 For local MySQL, create the database with:
 

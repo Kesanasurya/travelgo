@@ -17,7 +17,7 @@ spec:
         ports: [{containerPort: 5000}]
         env:
         - {name: PORT, value: "5000"}
-        - {name: DB_URL, value: jdbc:mysql://mysql:3306/travelgo?createDatabaseIfNotExist=true&serverTimezone=UTC}
+        - {name: DB_URL, value: "jdbc:mysql://mysql:3306/travelgo?createDatabaseIfNotExist=true&serverTimezone=UTC"}
         - {name: DB_USERNAME, value: root}
         - {name: DB_PASSWORD, valueFrom: {secretKeyRef: {name: travelgo-secrets, key: mysql-root-password}}}
         - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: travelgo-secrets, key: jwt-secret}}}

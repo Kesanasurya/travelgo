@@ -1,0 +1,30 @@
+.hero-content{z-index:2}
+.hero-content h1{max-width:680px;letter-spacing:-.035em}
+.hero-content>p{max-width:520px}
+.hero-scene{position:absolute;z-index:1;top:88px;right:max(5%,calc((100vw - 1180px)/2));width:340px;height:420px;perspective:1100px;pointer-events:none}
+.hero-orbit{position:absolute;top:40px;left:8px;width:300px;height:300px;border:1px solid rgba(255,255,255,.25);border-radius:50%;transform:rotateX(68deg) rotateZ(-24deg)}
+.trip-card{position:absolute;overflow:hidden;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.95);box-shadow:0 28px 65px rgba(2,17,28,.32);backdrop-filter:blur(14px)}
+.trip-card-main{top:25px;left:28px;width:250px;padding:8px;border-radius:20px;transform:rotateY(-13deg) rotateX(5deg) rotateZ(4deg);animation:trip-float 6s ease-in-out infinite}
+.trip-card-main>img{display:block;width:100%;height:235px;object-fit:cover;border-radius:14px}
+.trip-card-caption{display:grid;gap:6px;padding:13px 10px 11px;color:#102a43}
+.trip-card-caption>span:first-child,.trip-card-small>div>span{font-size:9px;font-weight:800;letter-spacing:.13em;color:#087f6d}
+.trip-card-caption>strong{font:600 19px "Playfair Display",serif}
+.trip-card-meta{display:flex;align-items:center;gap:5px;font-size:11px;color:#627d98}
+.trip-card-small{right:-2px;bottom:39px;display:flex;align-items:center;gap:10px;width:225px;padding:9px;border-radius:15px;transform:rotateY(9deg) rotateZ(-5deg);animation:trip-float-small 6s ease-in-out 1s infinite}
+.trip-card-small>img{width:53px;height:53px;object-fit:cover;border-radius:10px}
+.trip-card-small>div{display:grid;gap:5px;flex:1}
+.trip-card-small>div>span{font-size:8px}
+.trip-card-small>div>strong{font-size:12px;color:#102a43}
+.trip-card-small>svg{color:#087f6d}
+.trip-note{position:absolute;top:45px;right:-8px;display:flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid rgba(255,255,255,.45);border-radius:14px;background:rgba(255,255,255,.94);color:#102a43;box-shadow:0 14px 35px rgba(2,17,28,.2);transform:rotate(5deg);animation:trip-float-small 5s ease-in-out infinite}
+.trip-note-icon{display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:#e4faf5;color:#087f6d}
+.trip-note>span:last-child{display:grid;gap:2px}
+.trip-note strong{font-size:11px}
+.trip-note small{font-size:9px;color:#627d98}
+.search-box{position:relative;z-index:2}
+.search-btn{white-space:nowrap}
+@keyframes trip-float{0%,100%{transform:rotateY(-13deg) rotateX(5deg) rotateZ(4deg) translateY(0)}50%{transform:rotateY(-13deg) rotateX(5deg) rotateZ(4deg) translateY(-9px)}}
+@keyframes trip-float-small{0%,100%{translate:0 0}50%{translate:0 -6px}}
+@media(max-width:1050px){.hero-scene{right:3%;transform:scale(.86);transform-origin:top right}.hero-content>p{max-width:470px}.hero-content h1{font-size:clamp(46px,6vw,68px)}}
+@media(max-width:760px){.hero{min-height:0;padding-bottom:38px}.hero-content{padding-top:74px}.hero-content h1{font-size:clamp(43px,11vw,60px)}.hero-content>p{font-size:16px}.hero-scene{display:none}.search-box{margin-top:27px}}
+@media(prefers-reduced-motion:reduce){.trip-card-main,.trip-card-small,.trip-note{animation:none}}
