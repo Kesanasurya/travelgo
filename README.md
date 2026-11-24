@@ -74,3 +74,16 @@ Argo CD watches the repository and Argo Rollouts releases frontend images throug
 Register a user, sign in, browse destinations and packages, book a future trip, inspect My Bookings, cancel it, then sign in as the seeded admin and demonstrate the protected admin surface. For the project presentation, show the REST API, MySQL relationships, Docker Compose health ordering, CI run, Argo CD sync, and canary rollout progression.
 
 # travelgo
+
+## Demo accounts
+
+On start-up the backend adds demo data (set `SEED_DEMO_DATA=false` to turn it off): 8 hotels, six customers with
+Indian names and ten sample bookings in every status.
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@travelgo.dev` | `Admin@123` |
+| Admin | `lakshmi.rao@travelgo.dev` | `Admin@123` |
+| Customer | `aarav.sharma@travelgo.dev`, `priya.reddy@travelgo.dev`, `rohan.verma@travelgo.dev`, `ananya.iyer@travelgo.dev`, `karthik.nair@travelgo.dev`, `sneha.patel@travelgo.dev` | `Demo@123` |
+
+These passwords are public demo values. Change them, or turn demo data off, before real use.

@@ -2,6 +2,7 @@ package com.travelgo.entity;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.*;
@@ -21,4 +22,8 @@ public class Booking {
     @PrePersist void created(){createdAt=Instant.now(); updatedAt=createdAt;}
     @PreUpdate void updated(){updatedAt=Instant.now();}
     public enum Status { PENDING, CONFIRMED, CANCELLED, COMPLETED }
+
+    /** Who made the booking, for the admin bookings table (the full user stays hidden). */
+    @JsonProperty("customerName") public String customerName() { return user == null ? null : user.getName(); }
+    @JsonProperty("customerEmail") public String customerEmail() { return user == null ? null : user.getEmail(); }
 }

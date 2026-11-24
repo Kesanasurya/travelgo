@@ -4,6 +4,8 @@ import com.travelgo.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.*;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 @Configuration @RequiredArgsConstructor
 public class DataInitializer {
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE) // core data first; DemoDataSeeder builds on it
     CommandLineRunner seed(UserRepository users, DestinationRepository destinations, TravelPackageRepository packages, HotelRepository hotels, PasswordEncoder encoder) {
         return args -> {
             if (!users.existsByEmailIgnoreCase("admin@travelgo.dev")) {

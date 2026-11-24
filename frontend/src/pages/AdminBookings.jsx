@@ -26,11 +26,12 @@ export default function AdminBookings() {
 							: (
 								<div className="table-card">
 									<table>
-										<thead><tr><th>Booking</th><th>Package</th><th>Travel date</th><th>Guests</th><th>Amount</th><th>Status</th></tr></thead>
+										<thead><tr><th>Booking</th><th>Customer</th><th>Package</th><th>Travel date</th><th>Guests</th><th>Amount</th><th>Status</th></tr></thead>
 										<tbody>
 											{bookings.map((booking) => (
 												<tr key={booking.id}>
 													<td>TG-{booking.id}</td>
+													<td>{booking.customerName || "—"}<br /><small>{booking.customerEmail}</small></td>
 													<td>{booking.travelPackage?.name || "—"}</td>
 													<td>{booking.travelDate}</td>
 													<td>{booking.guests}</td>
