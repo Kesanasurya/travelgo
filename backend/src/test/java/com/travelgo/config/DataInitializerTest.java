@@ -1,6 +1,7 @@
 package com.travelgo.config;
 
 import com.travelgo.entity.Destination;
+import com.travelgo.entity.Hotel;
 import com.travelgo.entity.TravelPackage;
 import com.travelgo.repository.DestinationRepository;
 import com.travelgo.repository.HotelRepository;
@@ -8,6 +9,7 @@ import com.travelgo.repository.TravelPackageRepository;
 import com.travelgo.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -57,6 +60,38 @@ class DataInitializerTest {
         initializer.seed(users, destinations, packages, hotels, encoder).run();
 
         verify(packages, times(3)).save(any(TravelPackage.class));
+    }
+
+    @Test
+    void seedsAllHotelsWhenNoneExist() throws Exception {
+        when(users.existsByEmailIgnoreCase("admin@travelgo.dev")).thenReturn(true);
+        when(destinations.count()).thenReturn(4L);
+        when(destinations.findAll()).thenReturn(sampleDestinations());
+        when(packages.findAll()).thenReturn(List.of());
+        when(hotels.findAll()).thenReturn(List.of());
+
+        new DataInitializer().seed(users, destinations, packages, hotels, encoder).run();
+
+        ArgumentCaptor<Hotel> saved = ArgumentCaptor.forClass(Hotel.class);
+        verify(hotels, times(4)).save(saved.capture());
+        assertThat(saved.getAllValues()).extracting(Hotel::getName)
+            .containsExactly("Ocean View Resort", "Palm Paradise", "Skyline Grand", "Bali Garden Villas");
+        assertThat(saved.getAllValues().get(2).getDestination().getName()).isEqualTo("Dubai");
+    }
+
+    @Test
+    void seedsOnlyHotelsMissingFromDatabase() throws Exception {
+        when(users.existsByEmailIgnoreCase("admin@travelgo.dev")).thenReturn(true);
+        when(destinations.count()).thenReturn(4L);
+        when(destinations.findAll()).thenReturn(sampleDestinations());
+        when(packages.findAll()).thenReturn(List.of());
+        Hotel existing = new Hotel();
+        existing.setName("skyline grand");
+        when(hotels.findAll()).thenReturn(List.of(existing));
+
+        new DataInitializer().seed(users, destinations, packages, hotels, encoder).run();
+
+        verify(hotels, times(3)).save(any(Hotel.class));
     }
 
     private List<Destination> sampleDestinations() {

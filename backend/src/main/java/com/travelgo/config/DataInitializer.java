@@ -51,7 +51,37 @@ public class DataInitializer {
                 seedPackage(packages, existingPackages, "Maldives Island Retreat", findDestination(allDestinations, "Maldives"),
                     "Private island retreat with beaches and spa comfort", "5 Days / 4 Nights", "52000",
                     "Airport transfer, breakfast, island tour");
+
+            // Same hotels the public pages show from frontend/src/data.js, so the API and admin views match.
+            Set<String> existingHotels = hotels.findAll().stream()
+                .map(hotel -> hotel.getName().toLowerCase(Locale.ROOT))
+                .collect(Collectors.toSet());
+            seedHotel(hotels, existingHotels, "Ocean View Resort", findDestination(allDestinations, "Goa"),
+                "Beachfront resort with sea-view rooms and a pool", "4500", "4.7", "Calangute, Goa",
+                "Pool, free Wi-Fi, breakfast, beach access",
+                "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80");
+            seedHotel(hotels, existingHotels, "Palm Paradise", findDestination(allDestinations, "Goa"),
+                "Quiet garden stay surrounded by palms, close to the beach", "6200", "4.8", "Candolim, Goa",
+                "Spa, free Wi-Fi, breakfast, airport shuttle",
+                "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80");
+            seedHotel(hotels, existingHotels, "Skyline Grand", findDestination(allDestinations, "Dubai"),
+                "High-rise luxury hotel with skyline views", "9800", "4.9", "Downtown Dubai",
+                "Rooftop pool, gym, free Wi-Fi, breakfast",
+                "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=900&q=80");
+            seedHotel(hotels, existingHotels, "Bali Garden Villas", findDestination(allDestinations, "Bali"),
+                "Private villas set in tropical gardens", "7100", "4.8", "Ubud, Bali",
+                "Private pool, free Wi-Fi, breakfast, yoga deck",
+                "https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&w=900&q=80");
         };
+    }
+
+    private static void seedHotel(HotelRepository hotels, Set<String> existingNames, String name,
+                                  Destination destination, String description, String pricePerNight,
+                                  String rating, String location, String amenities, String imageUrl) {
+        if (existingNames.add(name.toLowerCase(Locale.ROOT))) {
+            hotels.save(new Hotel(null, name, destination, description, new BigDecimal(pricePerNight),
+                new BigDecimal(rating), imageUrl, location, amenities, null, null));
+        }
     }
 
     private static Destination findDestination(List<Destination> destinations, String name) {
